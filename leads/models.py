@@ -18,6 +18,13 @@ class Lead(models.Model):
         null=True,
         blank=True
     )
+    assigned_to = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="assigned_leads"
+) 
 
     name = models.CharField(max_length=100)
 

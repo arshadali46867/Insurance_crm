@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+```
+<div class="col-md-8">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4 class="mb-0">
+                Add New Lead
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Full Name
+                    </label>
+
+                    {{ form.name }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Mobile Number
+                    </label>
+
+                    {{ form.mobile }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Email Address
+                    </label>
+
+                    {{ form.email }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Lead Status
+                    </label>
+
+                    {{ form.status }}
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+                    Save Lead
+                </button>
+
+                <a
+                    href="/leads/"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}
