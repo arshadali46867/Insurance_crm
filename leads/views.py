@@ -11,6 +11,12 @@ from .serializers import LeadSerializer
 
 from customers.models import Customer
 from accounts.models import User
+import openpyxl
+
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+from django.http import HttpResponse
 
 
 class LeadViewSet(viewsets.ModelViewSet):
@@ -125,3 +131,132 @@ class LeadViewSet(viewsets.ModelViewSet):
             "agent_id": agent.id,
             "agent": agent.username
         })
+    
+
+
+def export_leads_excel(request):
+
+    workbook = openpyxl.Workbook()
+
+    sheet = workbook.active
+
+    sheet.title = "Leads"
+
+    headers = [
+        "ID",
+        "Name",
+        "Mobile",
+        "Email",
+        "Status",
+        "Assigned To"
+    ]
+
+    for col_num, header in enumerate(headers, 1):
+
+        sheet.cell(
+            row=1,
+            column=col_num
+        ).value = header
+
+    leads = Lead.objects.select_related(
+        "assigned_to"
+    )
+
+    row_num = 2
+
+    for lead in leads:
+
+        sheet.cell(
+            row=row_num,
+            column=1
+        ).value = lead.id
+
+        sheet.cell(
+            row=row_num,
+            column=2
+        ).value = lead.name
+
+        sheet.cell(
+            row=row_num,
+            column=3
+        ).value = lead.mobile
+
+        sheet.cell(
+            row=row_num,
+            column=4
+        ).value = lead.email
+
+        sheet.cell(
+            row=row_num,
+            column=5
+        ).value = lead.status
+
+        sheet.cell(
+            row=row_num,
+            column=6
+        ).value = (
+            lead.assigned_to.username
+            if lead.assigned_to
+            else ""
+        )
+
+        row_num += 1
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+    response[
+        "Content-Disposition"
+    ] = 'attachment; filename="leads.xlsx"'
+
+    workbook.save(response)
+
+    return response    
+
+
+def export_leads_pdf(request):
+
+    response = HttpResponse(
+        content_type="application/pdf"
+    )
+
+    response[
+        "Content-Disposition"
+    ] = 'attachment; filename="leads.pdf"'
+
+    pdf = SimpleDocTemplate(response)
+
+    data = [[
+        "ID",
+        "Name",
+        "Mobile",
+        "Email",
+        "Status"
+    ]]
+
+    leads = Lead.objects.all()
+
+    for lead in leads:
+
+        data.append([
+            lead.id,
+            lead.name,
+            lead.mobile,
+            lead.email or "",
+            lead.status
+        ])
+
+    table = Table(data)
+
+    table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.darkblue),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ])
+    )
+
+    pdf.build([table])
+
+    return response

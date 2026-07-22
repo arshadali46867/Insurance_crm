@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow">
+
+
+<div class="card-header bg-primary text-white">
+
+    <h3>
+        Policy Details
+    </h3>
+
+</div>
+
+<div class="card-body">
+
+    <table class="table table-bordered">
+
+        <tr>
+            <th>Policy Number</th>
+            <td>{{ policy.policy_number }}</td>
+        </tr>
+
+        <tr>
+            <th>Customer Name</th>
+            <td>{{ policy.customer.name }}</td>
+        </tr>
+
+        <tr>
+            <th>Email</th>
+            <td>{{ policy.customer.email }}</td>
+        </tr>
+
+        <tr>
+            <th>Mobile</th>
+            <td>{{ policy.customer.mobile }}</td>
+        </tr>
+
+        <tr>
+            <th>Insurance Type</th>
+            <td>{{ policy.insurance_type }}</td>
+        </tr>
+
+        <tr>
+            <th>Insurance Company</th>
+            <td>{{ policy.insurance_company }}</td>
+        </tr>
+
+        <tr>
+            <th>Premium Amount</th>
+            <td>₹ {{ policy.premium_amount }}</td>
+        </tr>
+
+        <tr>
+            <th>Start Date</th>
+            <td>{{ policy.start_date }}</td>
+        </tr>
+
+        <tr>
+            <th>Expiry Date</th>
+            <td>{{ policy.expiry_date }}</td>
+        </tr>
+
+    </table>
+
+    <a
+        href="/policies/"
+        class="btn btn-secondary"
+    >
+        Back
+    </a>
+
+</div>
+
+
+</div>
+
+{% endblock %}

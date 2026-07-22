@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow">
+
+
+<div class="card-header bg-primary text-white">
+
+    <h3>
+        Lead Details
+    </h3>
+
+</div>
+
+<div class="card-body">
+
+    <table class="table table-bordered">
+
+        <tr>
+            <th>Name</th>
+            <td>{{ lead.name }}</td>
+        </tr>
+
+        <tr>
+            <th>Mobile</th>
+            <td>{{ lead.mobile }}</td>
+        </tr>
+
+        <tr>
+            <th>Email</th>
+            <td>{{ lead.email }}</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>{{ lead.status }}</td>
+        </tr>
+
+        <tr>
+            <th>Assigned Agent</th>
+            <td>{{ lead.assigned_to }}</td>
+        </tr>
+
+        <tr>
+            <th>Created By</th>
+            <td>{{ lead.created_by }}</td>
+        </tr>
+
+        <tr>
+            <th>Created At</th>
+            <td>{{ lead.created_at }}</td>
+        </tr>
+
+    </table>
+
+    <a href="/leads/" class="btn btn-secondary">
+        Back
+    </a>
+
+</div>
+
+
+</div>
+
+{% endblock %}

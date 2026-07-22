@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+
+<h2 class="fw-bold">
+    Policies Management
+</h2>
+
+<div>
+
+    <a
+        href="/policies/create/"
+        class="btn btn-primary"
+    >
+        + Add Policy
+    </a>
+
+    <a
+        href="/api/policies/export/"
+        class="btn btn-success"
+    >
+        Export Excel
+    </a>
+    <a
+    href="/api/policies/pdf/"
+    class="btn btn-danger"
+    >
+        PDF Export
+    </a>
+
+   
+
+</div>
+
+
+</div>
+
+<div class="card shadow mb-4">
+
+
+<div class="card-body">
+
+    <form method="GET">
+
+        <div class="row">
+
+            <div class="col-md-10">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Search by Policy Number, Customer Name or Company"
+                    value="{{ search }}"
+                >
+
+            </div>
+
+            <div class="col-md-2">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100"
+                >
+                    Search
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+</div>
+
+<div class="card shadow">
+
+
+<div class="card-header bg-white">
+
+    <strong>
+        Total Policies: {{ policies.count }}
+    </strong>
+
+</div>
+
+<div class="card-body">
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>Policy No.</th>
+
+                <th>Customer</th>
+
+                <th>Type</th>
+
+                <th>Company</th>
+
+                <th>Premium</th>
+
+                <th>Expiry Date</th>
+
+                <th>Status</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for policy in policies %}
+
+            <tr>
+
+                <td>
+                <a href="/policies/{{ policy.id }}/">
+                    {{ policy.policy_number }}
+                </a>
+                </td>
+
+                <td>{{ policy.customer.name }}</td>
+
+                <td>{{ policy.insurance_type }}</td>
+
+                <td>{{ policy.insurance_company }}</td>
+
+                <td>₹ {{ policy.premium_amount }}</td>
+
+                <td>{{ policy.expiry_date }}</td>
+
+                <td>
+
+                    {% if policy.expiry_date < today %}
+
+                        <span class="badge bg-danger">
+                            Expired
+                        </span>
+
+                    {% elif policy.expiry_date <= renewal_date %}
+
+                        <span class="badge bg-warning text-dark">
+                            Renewal Due
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-success">
+                            Active
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a
+                        href="/policies/{{ policy.id }}/edit/"
+                        class="btn btn-warning btn-sm"
+                    >
+                        Edit
+                    </a>
+
+                    <a
+                        href="/policies/{{ policy.id }}/delete/"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this policy?')"
+                    >
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="8" class="text-center">
+
+                    No Policies Found
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</div>
+
+{% endblock %}

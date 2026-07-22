@@ -2,38 +2,323 @@
 
 {% block content %}
 
-<h2>Dashboard</h2>
+<h2 class="mb-4 fw-bold">
+    Dashboard
+</h2>
 
-<div class="row">
+<div class="row g-4">
 
-```
-<div class="col-md-3">
-    <div class="card">
-        <div class="card-body">
+
+<div class="col-lg-3 col-md-6">
+    <div class="card dashboard-card bg-primary text-white shadow h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
             <h5>Total Leads</h5>
-            <h3>0</h3>
+            <h1>{{ total_leads }}</h1>
         </div>
     </div>
 </div>
 
-<div class="col-md-3">
-    <div class="card">
-        <div class="card-body">
+<div class="col-lg-3 col-md-6">
+    <div class="card dashboard-card bg-success text-white shadow h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
             <h5>Total Customers</h5>
-            <h3>0</h3>
+            <h1>{{ total_customers }}</h1>
         </div>
     </div>
 </div>
 
-<div class="col-md-3">
-    <div class="card">
-        <div class="card-body">
+<div class="col-lg-3 col-md-6">
+    <div class="card dashboard-card bg-info text-white shadow h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
             <h5>Total Policies</h5>
-            <h3>0</h3>
+            <h1>{{ total_policies }}</h1>
         </div>
     </div>
 </div>
-```
+
+<div class="col-lg-3 col-md-6">
+    <div class="card dashboard-card bg-danger text-white shadow h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+            <h5>Renewals Due</h5>
+            <h1>{{ upcoming_renewals }}</h1>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+
+<div class="card bg-warning text-dark shadow h-100">
+
+    <div class="card-body text-center d-flex flex-column justify-content-center">
+
+        <h5>🏆 Top Agent</h5>
+
+        {% if top_agent %}
+
+            <h4>{{ top_agent.username }}</h4>
+
+            <h2>{{ top_agent.total_leads }}</h2>
+
+            <small>Assigned Leads</small>
+
+        {% else %}
+
+            <p>No Agent Found</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<div class="card shadow mt-5">
+
+
+<div class="card-header bg-dark text-white">
+    <h5 class="mb-0">
+        Recent Leads
+    </h5>
+</div>
+
+<div class="card-body">
+
+    <table class="table table-hover table-bordered">
+
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for lead in recent_leads %}
+
+            <tr>
+
+                <td>{{ lead.id }}</td>
+                <td>{{ lead.name }}</td>
+                <td>{{ lead.mobile }}</td>
+                <td>{{ lead.email }}</td>
+
+                <td>
+
+                    {% if lead.status == "new" %}
+                        <span class="badge bg-primary">New</span>
+
+                    {% elif lead.status == "converted" %}
+                        <span class="badge bg-success">Converted</span>
+
+                    {% elif lead.status == "interested" %}
+                        <span class="badge bg-warning text-dark">Interested</span>
+
+                    {% elif lead.status == "contacted" %}
+                        <span class="badge bg-info">Contacted</span>
+
+                    {% else %}
+                        <span class="badge bg-secondary">{{ lead.status }}</span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="5" class="text-center">
+                    No Leads Found
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</div>
+
+<div class="card shadow mt-4">
+
+
+<div class="card-header bg-success text-white">
+
+    <h5 class="mb-0">
+        Agent Performance Report
+    </h5>
+
+</div>
+
+<div class="card-body">
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-light">
+
+            <tr>
+                <th>Agent Username</th>
+                <th>Total Assigned Leads</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for agent in agent_performance %}
+
+            <tr>
+
+                <td>{{ agent.username }}</td>
+
+                <td>
+                    <span class="badge bg-primary">
+                        {{ agent.total_leads }}
+                    </span>
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="2" class="text-center">
+                    No Agents Found
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</div>
+
+<div class="card shadow mt-4">
+
+
+<div class="card-header bg-warning">
+
+    <h5 class="mb-0">
+        Lead Status Analytics
+    </h5>
+
+</div>
+
+
+
+
+<div class="card-body">
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-light">
+
+            <tr>
+                <th>Status</th>
+                <th>Total Leads</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>New</td>
+                <td><span class="badge bg-primary">{{ new_leads }}</span></td>
+            </tr>
+
+            <tr>
+                <td>Contacted</td>
+                <td><span class="badge bg-info">{{ contacted_leads }}</span></td>
+            </tr>
+
+            <tr>
+                <td>Interested</td>
+                <td><span class="badge bg-warning text-dark">{{ interested_leads }}</span></td>
+            </tr>
+
+            <tr>
+                <td>Quotation Sent</td>
+                <td><span class="badge bg-secondary">{{ quotation_sent_leads }}</span></td>
+            </tr>
+
+            <tr>
+                <td>Converted</td>
+                <td><span class="badge bg-success">{{ converted_leads }}</span></td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</div>
+
+<div class="card shadow mt-4">
+
+
+<div class="card-header bg-primary text-white">
+
+    <h5 class="mb-0">
+        Insurance CRM Overview
+    </h5>
+
+</div>
+
+<div class="card-body">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <ul class="list-group">
+
+                <li class="list-group-item">✅ Lead Management</li>
+                <li class="list-group-item">✅ Customer Management</li>
+                <li class="list-group-item">✅ Policy Management</li>
+
+            </ul>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <ul class="list-group">
+
+                <li class="list-group-item">✅ Policy Renewals Tracking</li>
+                <li class="list-group-item">✅ Dashboard Analytics</li>
+                <li class="list-group-item">✅ Role Based Access Control</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 </div>
 
