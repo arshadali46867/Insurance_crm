@@ -20,3 +20,14 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# from django.core.mail import send_mail
+
+# send_mail(
+#     "Test Email",
+#     "Insurance CRM Email Working",
+#     "soolemanali1234@gmail.com",
+#     ["arshadali46867@gmail.com"],
+#     fail_silently=False,
+# )

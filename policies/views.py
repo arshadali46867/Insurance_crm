@@ -199,3 +199,16 @@ def export_policies_pdf(request):
     pdf.build([table])
 
     return response
+
+
+from django.http import HttpResponse
+from .utils import send_renewal_reminders
+
+
+def test_reminder(request):
+
+    send_renewal_reminders()
+
+    return HttpResponse(
+        "Reminder emails sent."
+    )

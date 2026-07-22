@@ -12,6 +12,59 @@
     </h3>
 
 </div>
+<hr>
+
+<h4>Add Follow-up Note</h4>
+
+<form method="POST" action="/leads/{{ lead.id }}/add-note/">
+
+    {% csrf_token %}
+
+    <textarea
+        name="note"
+        class="form-control"
+        rows="3"
+        required
+    ></textarea>
+
+    <button
+        type="submit"
+        class="btn btn-primary mt-2"
+    >
+        Save Note
+    </button>
+
+</form>
+
+<hr>
+
+<h4>Lead Notes</h4>
+
+{% for note in notes %}
+
+<div class="card mb-2">
+
+    <div class="card-body">
+
+        <p>{{ note.note }}</p>
+
+        <small class="text-muted">
+
+            {{ note.created_by }}
+            |
+            {{ note.created_at }}
+
+        </small>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>No Notes Found</p>
+
+{% endfor %}
 
 <div class="card-body">
 

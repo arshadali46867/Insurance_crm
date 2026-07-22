@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 
-from leads.models import Lead
+from leads.models import Lead,LeadNote
 from django.shortcuts import render, redirect
 from .forms import LeadForm
 from django.shortcuts import get_object_or_404
@@ -497,10 +497,31 @@ def lead_detail(request, pk):
         "created_by"
     ).get(id=pk)
 
+    notes = LeadNote.objects.filter(
+    lead=lead
+    ).order_by("-created_at")
+
     return render(
         request,
         "leads/detail.html",
         {
-            "lead": lead
+            "lead": lead,
+            "notes": notes,
         }
+    )
+
+def add_lead_note(request, pk):
+
+    lead = Lead.objects.get(id=pk)
+
+    if request.method == "POST":
+
+        LeadNote.objects.create(
+            lead=lead,
+            note=request.POST.get("note"),
+            created_by=request.user
+        )
+
+    return redirect(
+        f"/leads/{pk}/"
     )

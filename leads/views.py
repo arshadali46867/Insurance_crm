@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 from django.http import HttpResponse
+from activity_logs.models import ActivityLog
 
 
 class LeadViewSet(viewsets.ModelViewSet):
@@ -60,8 +61,13 @@ class LeadViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
 
-        serializer.save(
+        lead = serializer.save(
             created_by=self.request.user
+        )
+
+        ActivityLog.objects.create(
+            user=self.request.user,
+            action=f"Created Lead {lead.name}"
         )
 
     @action(
@@ -82,6 +88,10 @@ class LeadViewSet(viewsets.ModelViewSet):
 
         lead.status = "converted"
         lead.save()
+        ActivityLog.objects.create(
+        user=request.user,
+        action=f"Converted Lead {lead.name} into Customer"
+        )
 
         return Response({
             "message": "Lead converted successfully",
@@ -124,6 +134,10 @@ class LeadViewSet(viewsets.ModelViewSet):
 
         lead.assigned_to = agent
         lead.save()
+        ActivityLog.objects.create(
+        user=request.user,
+        action=f"Assigned Lead {lead.name} to {agent.username}"
+        )
 
         return Response({
             "message": "Lead assigned successfully",

@@ -6,7 +6,8 @@ from .views import (PolicyViewSet,export_policies_excel)
 from .views import (
     PolicyViewSet,
     export_policies_excel,
-    export_policies_pdf
+    export_policies_pdf,
+    test_reminder
 )
 
 router = DefaultRouter()
@@ -29,7 +30,11 @@ path(
     export_policies_pdf,
     name="export_policies_pdf"
 ),
-
+path(
+    "test-reminder/",
+    test_reminder,
+    name="test_reminder"
+),
 
 ]
 

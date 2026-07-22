@@ -19,6 +19,7 @@ from .views import (
     policy_detail,
     customer_detail,
     lead_detail,
+    add_lead_note,
 )
 
 urlpatterns = [
@@ -111,6 +112,10 @@ path(
     lead_detail,
     name="lead_detail"
 ),
-
+path(
+    "leads/<int:pk>/add-note/",
+    add_lead_note,
+    name="add_lead_note"
+),
 
 ]
